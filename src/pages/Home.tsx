@@ -1,6 +1,7 @@
 import { useHistory } from 'react-router-dom';
-
-
+import { useAuth } from '../hooks/useAuth';
+import { FormEvent, useState } from 'react';
+import { database } from '../services/firebase';
 import { Button } from '../components/Button';
 
 import illustrationImg from '../assets/imagens/illustration.svg';
@@ -8,10 +9,6 @@ import logoImg from '../assets/imagens/logo.svg';
 import googleIconImg from '../assets/imagens/google-icon.svg';
 
 import '../styles/auth.scss';
-import { useAuth } from '../hooks/useAuth';
-import { FormEvent } from 'react';
-import { useState } from 'react';
-import { database } from '../services/firebase';
 
 export function Home() {
     const [ roomCode, setRoomCode ] = useState('');
@@ -39,6 +36,11 @@ export function Home() {
         if(!roomRef.exists()){
             alert('Room does not exist.');
             return;
+        }
+
+        if(roomRef.val().endedAt){
+            alert("Room alerady closed.");
+            return
         }
 
         history.push(`/rooms/${roomCode}`);
